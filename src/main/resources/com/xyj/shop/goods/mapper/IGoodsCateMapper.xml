@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+   <mapper namespace="com.xyj.shop.goods.mapper.IGoodsCateMapper">
+  
+	<resultMap id="BaseResultMap" type="com.xyj.shop.goods.model.GoodsCateModel">
+		<result column="id" property="id" />
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="descr" property="descr" />
+		<result column="parent_code" property="parentCode" />
+	</resultMap>
+  
+	<sql id="GoodsCate_Column_List">
+		id, code,name,descr,parent_code
+	</sql>
+  
+  <!-- 	查询条件 -->
+	<sql id="Append_Where">
+		WHERE 1=1
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="code != null and code != ''">
+				AND code LIKE #{code}
+			</if>
+			<if test="name != null and name != ''">
+				AND name LIKE #{name}
+			</if>
+			<if test="descr != null and descr != ''">
+				AND descr LIKE #{descr}
+			</if>
+			<if test="parentCode != null and parentCode != ''">
+				AND parent_code = #{parentCode}
+			</if>
+			<if test="orderby != null and orderby != ''">
+				ORDER BY  ${orderby}
+			</if>
+	</sql>
+  
+	<insert id="insert" parameterType="Object">
+		INSERT INTO xshop.dictionary(code,name,descr,parent_code)
+		VALUES(#{code},#{name}, #{descr}, #{parentCode})
+	</insert>
+  
+	<delete id="delete" parameterType="Object">
+		DELETE FROM xshop.dictionary WHERE code = #{id}
+	</delete>
+  
+	<select id="selectCount" resultType="java.lang.Integer"  >
+		SELECT count(1) FROM xshop.dictionary
+		<include refid="Append_Where" />
+	</select>
+	
+	<select id="selectIfDelete" resultType="java.lang.Integer"  >
+		SELECT count(1) FROM xshop.dictionary where code like #{id}
+	</select>
+  
+	<select id="selectList" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="GoodsCate_Column_List" />
+		FROM xshop.dictionary
+		<include refid="Append_Where" />
+		LIMIT ${rowStart},${pageLimit}
+	</select>
+  
+  	<select id="selectModel" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="GoodsCate_Column_List" />
+		FROM xshop.dictionary WHERE code = #{code}
+	</select>
+	
+	 <select id="selectcate" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="GoodsCate_Column_List" />
+		FROM xshop.dictionary WHERE parent_code = "ALL" OR parent_code = "AAA"
+	</select>
+  
+  	<select id="selectcateone" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="GoodsCate_Column_List" />
+		FROM xshop.dictionary WHERE parent_code = "ALL" 
+	</select>
+	
+	<select id="getCateUp" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="GoodsCate_Column_List" />
+		FROM xshop.dictionary WHERE parent_code = #{parentCode} 
+	</select>
+  
+  	<update id="update" parameterType="Object">
+		UPDATE xshop.dictionary SET 
+		<trim suffixOverrides=",">
+			<if test="name != null and name != '' ">
+				name = #{name},
+			</if>
+			<if test="descr != null and descr != '' ">
+				descr = #{descr},
+			</if>
+			<if test="parentCode != null and parentCode != '' ">
+				parent_code = #{parentCode},
+			</if>
+		</trim>
+		where code = #{code}
+	</update>
+  
+  </mapper> 

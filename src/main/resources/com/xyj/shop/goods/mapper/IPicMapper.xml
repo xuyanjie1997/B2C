@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+    <mapper namespace="com.xyj.shop.goods.mapper.IPicMapper" >
+    
+    <resultMap id="BaseResultMap" type="com.xyj.shop.goods.model.PicModel">
+		<result column="id" property="id" />
+		<result column="goods_code" property="goodsCode" />
+		<result column="url" property="url" />
+		<result column="type" property="type" />
+	</resultMap>
+  
+	<sql id="Img_Column_List">
+		id, goods_code,url,type
+	</sql>
+    
+  <insert id="insert" parameterType="Object">
+		INSERT INTO xshop.goods_img(goods_code,url,type)
+		VALUES(#{goodsCode},#{url}, #{type})
+	</insert>
+    
+   <select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="Img_Column_List" />
+		FROM xshop.goods_img WHERE goods_code = #{goodsCode}
+	</select>
+    
+       <select id="findMainPic" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="Img_Column_List" />
+		FROM xshop.goods_img WHERE goods_code = #{goodsCode} AND type="1"
+	</select>
+    
+    <select id="selectById" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="Img_Column_List" />
+		FROM xshop.goods_img WHERE id = #{id}
+	</select>
+    
+   <delete id="deleteModel" parameterType="Object">
+		DELETE FROM xshop.goods_img WHERE id = #{id}
+	</delete>
+	
+	<delete id="deleteThisCode" parameterType="Object">
+		DELETE FROM xshop.goods_img WHERE goods_code = #{goodsCode}
+	</delete>
+	
+	<update id="update" parameterType="Object">
+		UPDATE xshop.goods_img SET 
+		<trim suffixOverrides=",">
+			<if test="type != null and type != '' ">
+				type = #{type},
+			</if>
+		</trim>
+		where id = #{id}
+	</update>
+    
+    </mapper> 

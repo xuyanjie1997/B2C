@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.xyj.shop.goods.mapper.IDescrMapper">
+  
+  <resultMap id="BaseResultMap" type="com.xyj.shop.goods.model.DescrModel">
+		<result column="id" property="id" />
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="price" property="price" />
+		<result column="description" property="description" />
+		<result column="amount" property="amount" />
+		<result column="state" property="state" />
+		<result column="dic_code" property="dicCode" />
+	</resultMap>
+  
+	<sql id="Descr_Column_List">
+		id, code,name,price,description,amount,state,dic_code
+	</sql>
+  
+  	<sql id="Append_Where">
+		WHERE 1=1
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="code != null and code != ''">
+				AND code LIKE #{code}
+			</if>
+			<if test="name != null and name != ''">
+				AND name LIKE #{name}
+			</if>
+			<if test="description != null and description != ''">
+				AND description LIKE #{description}
+			</if>
+			<if test="dicCode != null and dicCode != ''">
+				AND dic_code LIKE #{dicCode}
+			</if>
+			<if test="orderby != null and orderby != ''">
+				ORDER BY  ${orderby}
+			</if>
+	</sql>
+  
+  <select id="selectCount" resultType="java.lang.Integer"  >
+		SELECT count(1) FROM xshop.goods_descr
+		<include refid="Append_Where" />
+	</select>
+  
+  <select id="selectList" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="Descr_Column_List" />
+		FROM xshop.goods_descr
+		<include refid="Append_Where" />
+		LIMIT ${rowStart},${pageLimit}
+	</select>
+	
+	  <select id="getList" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="Descr_Column_List" />
+		FROM xshop.goods_descr WHERE dic_code = #{dicCode} 
+		LIMIT ${rowStart},${pageLimit}
+	</select>
+	
+	<select id="findOneList" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="Descr_Column_List" />
+		FROM xshop.goods_descr WHERE dic_code Like #{dicCode} 
+		LIMIT ${rowStart},${pageLimit}
+	</select>
+  
+  	<delete id="delete" parameterType="Object">
+		DELETE FROM xshop.goods_descr WHERE code = #{id}
+	</delete>
+  
+   <select id="selectModel" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="Descr_Column_List" />
+		FROM xshop.goods_descr WHERE code = #{code}
+	</select>
+	
+	<select id="selectOneList" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="Descr_Column_List" />
+		FROM xshop.goods_descr WHERE code = #{goodscode}
+	</select>
+	
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="Descr_Column_List" />
+		FROM xshop.goods_descr 
+	</select>
+  
+  	<insert id="insert" parameterType="Object">
+		INSERT INTO xshop.goods_descr(code,name,price,description,amount,state,dic_code)
+		VALUES(#{code},#{name},#{price}, #{description}, #{amount},#{state},#{dicCode})
+	</insert>
+	
+	<update id="update" parameterType="Object">
+		UPDATE xshop.goods_descr SET 
+		<trim suffixOverrides=",">
+			<if test="name != null and name != '' ">
+				name = #{name},
+			</if>
+			<if test="price != null and price != '' ">
+				price = #{price},
+			</if>
+			<if test="description != null and description != '' ">
+				description = #{description},
+			</if>
+			<if test="amount != null and amount != '' ">
+				amount = #{amount},
+			</if>
+			<if test="state != null and state != '' ">
+				state = #{state},
+			</if>
+			<if test="dicCode != null and dicCode != '' ">
+				dic_code = #{dicCode},
+			</if>
+		</trim>
+		where code = #{code}
+	</update>
+  
+</mapper> 

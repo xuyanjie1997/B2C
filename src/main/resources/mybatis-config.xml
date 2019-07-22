@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE configuration PUBLIC  "-//mybatis.org//DTD Config 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<!-- 	打印查询语句 -->
+	<settings>
+		<setting value="STDOUT_LOGGING" name="logImpl" />
+	</settings>
+
+	<typeAliases>
+		<typeAlias type="com.xyj.shop.user.model.UserModel"	alias="UserModel" />
+	</typeAliases>
+
+	<mappers>
+		<mapper resource="com/xyj/shop/user/mapper/IUserMapper.xml" />
+		<mapper resource="com/xyj/shop/goods/mapper/IGoodsCateMapper.xml" />
+		<mapper resource="com/xyj/shop/goods/mapper/IDescrMapper.xml" />
+		<mapper resource="com/xyj/shop/order/mapper/IOrderMsgMapper.xml" />
+		<mapper resource="com/xyj/shop/order/mapper/IOrderGoodsMapper.xml" />
+		<mapper resource="com/xyj/shop/goods/mapper/IPicMapper.xml" />
+	</mappers>
+
+</configuration>

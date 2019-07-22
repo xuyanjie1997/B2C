@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.xyj.shop.order.mapper.IAreaMapper" >
+  
+    <resultMap id="BaseResultMap" type="com.xyj.shop.order.model.OrderMsgModel">
+		<result column="id" property="id" />
+		<result column="code" property="code" />
+		<result column="name" property="name" />
+		<result column="lvl" property="lvl" />
+		<result column="parent_code" property="parentCode" />
+	</resultMap>
+  
+  	<sql id="Area_Column_List">
+		id,code,name,lvl,parent_code
+	</sql>
+  
+  	<select id="selectSheng" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="Area_Column_List" />
+		FROM xshop.area WHERE lvl = 1
+	</select>
+	
+	 <select id="selectUp" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="Area_Column_List" />
+		FROM xshop.area WHERE parent_code = #{parentCode} 
+	</select>
+
+  
+    </mapper> 

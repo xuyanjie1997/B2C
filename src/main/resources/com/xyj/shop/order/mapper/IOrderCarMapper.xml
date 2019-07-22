@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.xyj.shop.order.mapper.IOrderCarMapper" >
+  
+  <resultMap id="BaseResultMap" type="com.xyj.shop.order.model.OrderCarModel">
+		<result column="id" property="id" />
+		<result column="user_code" property="userCode" />
+		<result column="goods_code" property="goodsCode" />
+		<result column="num" property="num" />
+		
+	<collection property="delist" ofType="com.xyj.shop.goods.model.DescrModel">
+			<result column="spm" property="name"/>
+			<result column="jiege" property="price"/>
+			<result column="miaoshu" property="description"/>
+			<result column="up" property="dicCode"/>
+			<result column="state" property="state"/>
+	</collection>
+	
+	<collection property="pic" ofType="com.xyj.shop.goods.model.PicModel">
+			<result column="tupianming" property="url"/>
+			<result column="type" property="type"/>
+	</collection>
+	
+ </resultMap>
+  
+	<sql id="OrderCar_Column_List">
+		id, user_code,goods_code,num
+	</sql>
+	
+		<sql id="Append_Where">
+		WHERE 1=1
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="userCode != null and userCode != ''">
+				AND user_code = #{userCode}
+			</if>
+			<if test="goodsCode != null and goodsCode != ''">
+				AND goods_code LIKE #{goodsCode}
+			</if>
+			ORDER BY  goods_code 
+	</sql>
+  
+   <select id="selectByUser" resultMap="BaseResultMap" parameterType="Object">
+		SELECT oc.*,gd.name spm,gd.price jiege,gd.description miaoshu,gd.dic_code up,gd.state,gi.url tupianming,gi.type
+		
+ 		FROM xshop.order_car oc
+
+		LEFT JOIN xshop.goods_descr gd ON gd.code=oc.goods_code
+
+		LEFT JOIN xshop.goods_img gi ON gi.goods_code=oc.goods_code 
+
+		WHERE user_code = #{userCode};
+	</select>
+  
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="OrderCar_Column_List" />
+		FROM xshop.order_car WHERE user_code = #{userCode}
+	</select>
+	
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="OrderCar_Column_List" />
+		FROM xshop.order_car WHERE user_code = #{userCode} AND goods_code = #{goodsCode}
+	</select>
+  
+  	<select id="selectCount" resultType="java.lang.Integer"  >
+		SELECT count(1) FROM xshop.order_car WHERE user_code = #{userCode}
+	</select>
+  
+    <select id="selectCodeById" resultType="java.lang.String"  >
+		SELECT goods_code  FROM xshop.order_car where id = #{id}
+	</select>
+  
+  <insert id="insert" parameterType="Object">
+		INSERT INTO xshop.order_car(user_code,goods_code,num)
+		VALUES(#{userCode},#{goodsCode},#{num})
+	</insert>
+  
+   <update id="updateById" parameterType="Object">
+		UPDATE xshop.order_car SET 
+		num = #{num}
+		WHERE id = ${id}
+	</update>
+  
+  <update id="update" parameterType="Object">
+		UPDATE xshop.order_car SET 
+		<trim suffixOverrides=",">
+			<if test="num != null and num != '' ">
+				num = #{num},
+			</if>
+		</trim>
+		WHERE user_code = #{userCode} AND goods_code = #{goodsCode}
+	</update>
+  
+   <delete id="del" parameterType="Object">
+		DELETE FROM xshop.order_car WHERE id = #{id}
+	</delete>
+  
+  </mapper> 

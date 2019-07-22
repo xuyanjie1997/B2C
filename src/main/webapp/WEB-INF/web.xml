@@ -1,0 +1,122 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  
+   <context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:spring-common.xml
+		</param-value>
+	</context-param>
+
+
+<!-- 	字符编码过滤器 -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+      <filter>
+    <filter-name>UserFilter</filter-name>
+    <filter-class>com.xyj.shop.util.UserFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>UserFilter</filter-name>
+    <url-pattern>/web/page/*</url-pattern>
+<!--     <dispatcher>REQUEST</dispatcher> -->
+  </filter-mapping>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>*.do</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+
+	<servlet>
+	<servlet-name>Spring-Servlet</servlet-name>
+	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	<init-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:spring-servlet.xml
+		</param-value>
+	</init-param>
+	<load-on-startup>1</load-on-startup>
+</servlet>
+
+ <servlet>
+    <servlet-name>AuthCodeServlet</servlet-name>
+    <servlet-class>com.xyj.shop.util.AuthCodeServlet</servlet-class>
+    <init-param>
+      <param-name>count</param-name>
+      <param-value>4</param-value>
+    </init-param>
+    <init-param>
+      <param-name>width</param-name>
+      <param-value>75</param-value>
+    </init-param>
+    <init-param>
+      <param-name>height</param-name>
+      <param-value>25</param-value>
+    </init-param>
+  </servlet>
+    <servlet-mapping>
+    <servlet-name>AuthCodeServlet</servlet-name>
+    <url-pattern>/AuthCodeServlet</url-pattern>
+  </servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Spring-Servlet</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Spring-Servlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+	
+	
+	 <!--通过defaultServlet来处理jpg-->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+    <!--通过DefaultServlet来处理png-->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.png</url-pattern>
+    </servlet-mapping>
+    <!--通过defaultServlet来处理.js文件-->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+    <!--通过defaultServlet来处理.css文件-->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>
+    <!--	通过defaultServlet来处理/web/common目录中的文件-->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/web/common/*</url-pattern>
+    </servlet-mapping>
+
+	
+</web-app>

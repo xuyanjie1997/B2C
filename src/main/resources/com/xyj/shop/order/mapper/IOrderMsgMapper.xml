@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="com.xyj.shop.order.mapper.IOrderMsgMapper" >
+  
+  <resultMap id="BaseResultMap" type="com.xyj.shop.order.model.OrderMsgModel">
+		<result column="id" property="id" />
+		<result column="code" property="code" />
+		<result column="usercode" property="usercode" />
+		<result column="attn" property="attn" />
+		<result column="address" property="address" />
+		<result column="tel" property="tel" />
+		<result column="time" property="time" />
+		<result column="heji" property="heji" />
+		<result column="state" property="state" />
+	</resultMap>
+  
+	<sql id="OrderMsg_Column_List">
+		id,code,usercode,attn,address,tel,time,heji,state
+	</sql>
+	
+		<sql id="Append_Where">
+		WHERE 1=1
+			<if test="id != null">
+				AND id = #{id}
+			</if>
+			<if test="code != null and code != ''">
+				AND code LIKE #{code}
+			</if>
+			<if test="usercode != null and usercode != ''">
+				AND usercode LIKE #{usercode}
+			</if>
+			<if test="address != null and address != ''">
+				AND address LIKE #{address}
+			</if>
+			<if test="state != null and state != ''">
+				AND state = #{state}
+			</if>
+			ORDER BY  time DESC
+	</sql>
+  
+  	<select id="selectList" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="OrderMsg_Column_List" />
+		FROM xshop.order_msg
+		<include refid="Append_Where" />
+		LIMIT ${rowStart},${pageLimit}
+	</select>
+  
+  	<select id="selectCount" resultType="java.lang.Integer"  >
+		SELECT count(1) FROM xshop.order_msg
+		<include refid="Append_Where" />
+	</select>
+  
+    <select id="selectModel" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="OrderMsg_Column_List" />
+		FROM xshop.order_msg WHERE code = #{id}
+	</select>
+	
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		SELECT <include refid="OrderMsg_Column_List" />
+		FROM xshop.order_msg 
+	</select>
+  
+   <update id="update" parameterType="Object">
+		UPDATE xshop.order_msg SET 
+		<trim suffixOverrides=",">
+			<if test="state != null and state != '' ">
+				state = #{state},
+			</if>
+			<if test="address != null and address != '' ">
+				address = #{address},
+			</if>
+			<if test="time != null and time != '' ">
+				time = #{time},
+			</if>
+		</trim>
+		where code = #{code}
+	</update>
+  
+    <insert id="add" parameterType="Object">
+		INSERT INTO xshop.order_msg(code,usercode,attn,address,tel,time,heji,state)
+		VALUES(#{code},#{usercode},#{attn},#{address},#{tel},#{time},#{heji},#{state})
+	</insert>
+  
+  </mapper> 
